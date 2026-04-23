@@ -1,9 +1,8 @@
 name: Build EXE
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -16,17 +15,20 @@ jobs:
       with:
         python-version: "3.11"
 
-    - run: |
-        pip install -r requirements.txt
-        pip install pyinstaller
+    - name: Install
+      run: |
+        pip install flask pillow pyinstaller
 
-    - run: |
+    - name: Build exe
+      run: |
         pyinstaller --onefile --noconsole app.py
 
-    - run: |
+    - name: Zip
+      run: |
         powershell Compress-Archive -Path dist/app.exe -DestinationPath app.zip
 
-    - uses: softprops/action-gh-release@v2
+    - name: Upload to Release
+      uses: softprops/action-gh-release@v2
       with:
         files: app.zip
       env:
