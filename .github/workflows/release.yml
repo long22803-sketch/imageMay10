@@ -4,6 +4,9 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write   # 🔥 BẮT BUỘC
+
 jobs:
   build:
     runs-on: windows-latest
@@ -33,5 +36,3 @@ jobs:
         files: app.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-permissions:
-  contents: write
